@@ -1,0 +1,27 @@
+//NOTE: This is only code for serilizer to implement on the board
+
+
+module ser(
+input clk,
+input [7:0]data_in,
+output reg serial_out=0
+);
+reg [3:0]bit_index=0;
+reg [9:0]en_code;
+reg [7:0]data;
+always@(*) begin
+case(data_in)
+    8'h01:en_code=10'b0111100000;
+    8'h02:en_code=10'b0111000001;
+    8'h03:en_code=10'b0110000011;
+    default:en_code=10'b0000000000;
+ endcase
+end
+always@(posedge clk) begin
+serial_out<=en_code[bit_index];
+if(bit_index==9)
+    bit_index<=0;
+else
+    bit_index<=bit_index+1;
+end
+endmodule
